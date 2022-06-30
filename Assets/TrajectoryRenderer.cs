@@ -9,6 +9,10 @@ public class TrajectoryRenderer : MonoBehaviour
     [SerializeField]
     Transform target;
 
+    [SerializeField]
+    Transform prefab;
+
+    int step;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,16 +21,22 @@ public class TrajectoryRenderer : MonoBehaviour
 
         lineRenderer.SetPosition(0, target.position);
         lineRenderer.SetPosition(1, target.position);
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
+        lineRenderer.startWidth = 0.001f;
+        lineRenderer.endWidth = 0.001f;
         lineRenderer.startColor = Color.red;
         lineRenderer.endColor = Color.red;
+
+        step = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        step += 1;
         DrawLine(target.position);
+        if(step % 10 == 0) {
+            Instantiate(prefab, target.position, Quaternion.identity);
+        }
     }
 
         
