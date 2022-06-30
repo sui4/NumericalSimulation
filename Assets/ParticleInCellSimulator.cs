@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Simulator : MonoBehaviour
+public class ParticleInCellSimulator : MonoBehaviour
 {
     Vector3 E = new Vector3(1, 2, 1);
     Vector3 B = new Vector3(5, 7, 8);
@@ -20,20 +20,22 @@ public class Simulator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // deltaT = Time.deltaTime;
-        Vector3 t = (k * deltaT / 2f) * B;
-        Vector3 s = (2f * t) / (1f + Vector3.Dot(t, t));
-
-        Vector3 vMinus = vel + E * (k * deltaT / 2f);
-        Vector3 vCenter = vMinus + Vector3.Cross(vMinus, t);
-        Vector3 vPlus = vMinus + Vector3.Cross(vCenter, s);
-
-        vel = vPlus + E * (k * deltaT / 2f);
-        
         // update pos
-        pos += vel * deltaT;
         this.transform.position = pos;
+        pos += vel * deltaT;
+        simulate();
+
     }
 
+    void simulate() {
+        float l = k * deltaT / 2f;
+        Vector3 t = l * B;
+        Vector3 s = (2f * t) / (1f + Vector3.Dot(t, t));
 
+        Vector3 vMinus = vel + E * l;
+        Vector3 vPrime = vMinus + Vector3.Cross(vMinus, t);
+        Vector3 vPlus = vMinus + Vector3.Cross(vPrime, s);
+
+        vel = vPlus + E * l;
+    }
 }
